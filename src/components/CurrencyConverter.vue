@@ -9,7 +9,7 @@
           :key="index"
           :value="key"
         >
-          {{ `${value} (${key})` }}
+          {{ `${key} - ${value}` }}
         </option>
       </select>
       <label for="to-currency">To</label>
@@ -19,14 +19,22 @@
           :key="index"
           :value="key"
         >
-          {{ `${value} (${key})` }}
+          {{ `${key} - ${value}` }}
         </option>
       </select>
-      <input type="number" min="0" name="" id="" placeholder="Amount..." />
-      <input type="submit" value="Convert" />
+      <input
+        :value="amount"
+        @input="updateAmount"
+        type="number"
+        min="0"
+        name=""
+        id="amount"
+        placeholder="Amount..."
+      />
+      <input @submit="convert" type="submit" value="Convert" />
     </form>
     <div class="result">
-      <p>Result: your result</p>
+      <p>Result: {{ result }}</p>
     </div>
   </div>
 </template>
@@ -40,10 +48,23 @@ export default {
     return {};
   },
   methods: {
-    ...mapActions(["fetchCurrencies"]),
+    ...mapActions(["fetchCurrencies", "convertCurrency"]),
+    convert() {
+      this.convertCurrency(this.fromCurrency, this.toCurrency, this.amount);
+    },
+    updateAmount(e) {
+      this.$store.commit("setAmount", e.target.value);
+      console.log("new amount in store", this.amount);
+    },
   },
   computed: {
-    ...mapGetters(["allCurrencies"]),
+    ...mapGetters([
+      "allCurrencies",
+      "result",
+      "fromCurrency",
+      "toCurrency",
+      "amount",
+    ]),
   },
   created() {
     // this.fetchCurrencies();
