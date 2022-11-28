@@ -30,7 +30,8 @@
         :value="amount"
         @input="updateAmount"
         type="number"
-        min="0"
+        min="0.01"
+        step="0.01"
         placeholder="Amount..."
       />
       <input type="submit" value="Convert" />
@@ -59,12 +60,15 @@ export default {
     },
     updateAmount(e) {
       this.$store.commit("setAmount", e.target.value);
+      this.$store.commit("setResult", "");
     },
     updateFromCurrency(e) {
       this.$store.commit("setFromCurrency", e.target.value);
+      this.$store.commit("setResult", "");
     },
     updateToCurrency(e) {
       this.$store.commit("setToCurrency", e.target.value);
+      this.$store.commit("setResult", "");
     },
   },
   computed: {

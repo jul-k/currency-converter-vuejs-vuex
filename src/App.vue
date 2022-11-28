@@ -28,14 +28,14 @@ body {
   margin: auto;
   letter-spacing: 1px;
 }
-@media (max-width: 710px) {
+@media (max-width: 700px) {
   body {
     width: 500px;
   }
 }
-@media (max-width: 510px) {
+@media (max-width: 500px) {
   body {
-    width: 300px;
+    width: 95vw;
   }
 }
 </style>
