@@ -1,9 +1,13 @@
 <template>
   <div>
-    <h1 @click="fetchCurrencies">Currency Converter</h1>
-    <form>
-      <label for="from-currency">From</label>
-      <select name="" id="from-currency">
+    <h1>Currency Converter</h1>
+    <form @submit="convert">
+      <label for="from-currency">From:</label>
+      <select
+        @change="updateFromCurrency"
+        :value="fromCurrency"
+        id="from-currency"
+      >
         <option
           v-for="(value, key, index) in allCurrencies"
           :key="index"
@@ -12,8 +16,8 @@
           {{ `${key} - ${value}` }}
         </option>
       </select>
-      <label for="to-currency">To</label>
-      <select name="" id="to-currency">
+      <label for="to-currency">To:</label>
+      <select @change="updateToCurrency" :value="toCurrency" id="to-currency">
         <option
           v-for="(value, key, index) in allCurrencies"
           :key="index"
@@ -27,14 +31,14 @@
         @input="updateAmount"
         type="number"
         min="0"
-        name=""
-        id="amount"
         placeholder="Amount..."
       />
-      <input @submit="convert" type="submit" value="Convert" />
+      <input type="submit" value="Convert" />
     </form>
     <div class="result">
-      <p>Result: {{ result }}</p>
+      <p>
+        {{ result }} <span v-if="result">{{ toCurrency }}</span>
+      </p>
     </div>
   </div>
 </template>
@@ -49,12 +53,18 @@ export default {
   },
   methods: {
     ...mapActions(["fetchCurrencies", "convertCurrency"]),
-    convert() {
-      this.convertCurrency(this.fromCurrency, this.toCurrency, this.amount);
+    convert(e) {
+      e.preventDefault();
+      this.convertCurrency();
     },
     updateAmount(e) {
       this.$store.commit("setAmount", e.target.value);
-      console.log("new amount in store", this.amount);
+    },
+    updateFromCurrency(e) {
+      this.$store.commit("setFromCurrency", e.target.value);
+    },
+    updateToCurrency(e) {
+      this.$store.commit("setToCurrency", e.target.value);
     },
   },
   computed: {
@@ -67,7 +77,7 @@ export default {
     ]),
   },
   created() {
-    // this.fetchCurrencies();
+    this.fetchCurrencies();
   },
 };
 </script>
@@ -105,5 +115,10 @@ input[type="submit"] {
   color: #fff;
   font-size: 20px;
   text-transform: uppercase;
+}
+.result p {
+  font-size: 25px;
+  text-align: center;
+  overflow: scroll;
 }
 </style>

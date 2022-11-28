@@ -24,11 +24,11 @@ export default {
 body {
   font-family: "Short Stack Regular", "Franklin Gothic Medium", "Arial Narrow",
     Arial, sans-serif;
-  width: 800px;
+  width: 600px;
   margin: auto;
   letter-spacing: 1px;
 }
-@media (max-width: 810px) {
+@media (max-width: 710px) {
   body {
     width: 500px;
   }

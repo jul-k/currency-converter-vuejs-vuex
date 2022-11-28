@@ -9,7 +9,7 @@ const state = {
     result: "",
     fromCurrency: "",
     toCurrency: "",
-    amount: 0,
+    amount: "",
 };
 
 const getters = {
@@ -23,7 +23,6 @@ const getters = {
 const actions = {
     async fetchCurrencies({ commit }) {
         const response = await axios.get(`${currencyListUrl}?api_key=${apiKey}&format=json`);
-        console.log(response.data.currencies);
 
         const currencies = response.data.currencies;
 
@@ -35,20 +34,14 @@ const actions = {
             {}
             );
 
-        console.log(Object.keys(orderedCurrencies)[0]);
-
         commit("setCurrencies", orderedCurrencies);
         commit("setFromCurrency", Object.keys(orderedCurrencies)[0]);
         commit("setToCurrency", Object.keys(orderedCurrencies)[0]);
     },
-    updateFromCurrency() {},
-    updateToCurrency() {},
-    async convertCurrency({ commit }, fromCurrency, toCurrency, amount ) {
-        const response = await axios.get(`${currencyConversionUrl}?api_key=${apiKey}&from=${fromCurrency}&to=${toCurrency}&amount=${amount}&format=json`);
-        console.log(response.data.rate_for_amount);
-        console.log(response.data);
+    async convertCurrency({ commit, state }) {
+        const response = await axios.get(`${currencyConversionUrl}?api_key=${apiKey}&from=${state.fromCurrency}&to=${state.toCurrency}&amount=${state.amount}&format=json`);
 
-        commit("setResult", response.data.rate_for_amount);
+        commit("setResult", parseFloat(response.data.rates[state.toCurrency].rate_for_amount).toFixed(2));
     },
 };
 
